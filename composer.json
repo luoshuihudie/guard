@@ -1,0 +1,10 @@
+{
+    "name": "chenwen/guard",
+    "authors": [
+        {
+            "name": "陈文",
+            "email": "master@chenwen.name"
+        }
+    ],
+    "require": {}
+}
