@@ -1,6 +1,7 @@
 <?php namespace Kr\Guard\Middleware;
 
-use Closure,Gate;
+use Closure;
+use Gate;
 
 class Authorizate
 {
@@ -15,15 +16,15 @@ class Authorizate
     public function handle($request, Closure $next, $guard = null)
     {
         $routeName = app('router')->currentRouteName();
-        if(Gate::denies($routeName)){
+        if (Gate::denies($routeName)) {
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json([
                     'code' => 403,
-                    'msg' => config('auth.response.403','您的权限不足，请联系管理员获取更多访问权限。')
+                    'msg'  => config('auth.response.403', '您的权限不足，请联系管理员获取更多访问权限。'),
                 ])->setStatusCode(403);
             } else {
                 return response(
-                    config('auth.response.403','您的权限不足，请联系管理员获取更多访问权限。')
+                    config('auth.response.403', '您的权限不足，请联系管理员获取更多访问权限。')
                     , 403
                 );
             }
