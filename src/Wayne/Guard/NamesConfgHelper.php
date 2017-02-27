@@ -1,6 +1,6 @@
 <?php 
 
-namespace Kr\Guard;
+namespace Wayne\Guard;
 
 class NamesConfgHelper
 {

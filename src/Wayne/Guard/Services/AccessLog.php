@@ -1,8 +1,8 @@
 <?php
 
-namespace Kr\Guard\Services;
+namespace Wayne\Guard\Services;
 
-use Kr\Guard\NamesConfigHelper;
+use Wayne\Guard\NamesConfigHelper;
 
 class AccessLog
 {
@@ -11,7 +11,7 @@ class AccessLog
 
     public function __construct()
     {
-        $permissions = \Kr\Guard\NamesConfigHelper::getConfig();;
+        $permissions = \Wayne\Guard\NamesConfigHelper::getConfig();;
         $this->logs  = collect($permissions)
             ->flatMap(function ($item) {
                 return $item['routes'];

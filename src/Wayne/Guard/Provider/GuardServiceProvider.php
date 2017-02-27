@@ -1,6 +1,4 @@
-<?php
-
-namespace Kr\Guard\Providers;
+<?php namespace Wayne\Guard\Providers;
 
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -32,7 +30,7 @@ class GuardServiceProvider extends ServiceProvider
                 }
             });
 
-            $keys = \Kr\Guard\NamesConfigHelper::getKeys();
+            $keys = \Wayne\Guard\NamesConfigHelper::getKeys();
             foreach ($keys as $key) {
                 $gate->define($key, function ($user) use ($key) {
                     return $user->hasAccess($key);
@@ -47,6 +45,6 @@ class GuardServiceProvider extends ServiceProvider
         }
 
         // 注册行为日志
-        app()->instance('access.log', new \Kr\Guard\Services\AccessLog);
+        app()->instance('access.log', new \Wayne\Guard\Services\AccessLog);
     }
 }

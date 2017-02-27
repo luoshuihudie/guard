@@ -1,6 +1,6 @@
 <?php
 
-namespace Kr\Guard\trait ;
+namespace Wayne\Guard\trait ;
 
 trait HasManyRole
 {
@@ -30,7 +30,7 @@ trait HasManyRole
 
     function getFullPermissions()
     {
-        $keys = \Kr\Guard\NamesConfigHelper::getKeys();
+        $keys = \Wayne\Guard\NamesConfigHelper::getKeys();
         return array_fill_keys($keys, 1);
     }
 

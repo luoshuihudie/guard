@@ -1,4 +1,4 @@
-<?php namespace Kr\Guard\Middleware;
+<?php namespace Wayne\Guard\Middleware;
 
 use Closure,Gate;
 
