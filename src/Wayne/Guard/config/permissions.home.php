@@ -9,7 +9,7 @@ return [
 			'home',
 		]
 	],
-	'namespaces' => ['auth', 'web', 'throttle', 'log'],
+	'namespaces' => ['web', 'guard.auth', 'guard.throttle', 'guard.log'],
 	'routes' => [
 		'welcome'=>[
             'name'    =>'Welcome',
