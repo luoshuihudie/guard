@@ -8,7 +8,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Wayne\\Guard\\": "Wayne/Guard/"
+            "Wayne\\Guard\\": "src/Wayne/Guard/"
         }
     },
     "require": {
