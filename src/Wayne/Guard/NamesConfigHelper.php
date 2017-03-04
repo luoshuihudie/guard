@@ -2,7 +2,7 @@
 
 namespace Wayne\Guard;
 
-class NamesConfgHelper
+class NamesConfigHelper
 {
         static function getKeys()
     {
