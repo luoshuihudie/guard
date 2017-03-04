@@ -6,5 +6,11 @@
             "email": "master@chenwen.name"
         }
     ],
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "Wayne\\Guard\\": "Wayne/Guard/"
+        }
+    },
+    "require": {
+    }
 }
