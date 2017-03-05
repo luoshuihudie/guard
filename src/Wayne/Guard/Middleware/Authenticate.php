@@ -18,8 +18,8 @@ class Authenticate
         $routeName = app('router')->currentRouteName();
 
         // 如果未登录
-        if (Auth::driver($guard)->guest()) {
-            // if (Auth::guard($guard)->guest()) {// ~5.2
+        // if (Auth::driver($guard)->guest()) {
+        if (Auth::guard($guard)->guest()) {// ~5.2
             $redirect_url = $request->get('redirect_to') ?: config('sso.uri-success-skip');
             session(['redirect_url' => $redirect_url]);
             if ($request->ajax() || $request->wantsJson()) {
