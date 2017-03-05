@@ -1,44 +1,44 @@
-<?php 
+<?php
 
 namespace Wayne\Guard;
 
 class NamesConfigHelper
 {
-        static function getKeys()
+    public static function getKeys()
     {
         $nodes = self::getKeyNodes();
         return array_keys($nodes);
     }
 
-    static function getKeyThrottles()
-    {   
+    public static function getKeyThrottles()
+    {
         $nodes = self::getKeyNodes();
-        return array_map(function($item){
+        return array_map(function ($item) {
             return isset($item['throttle']) ? $item['throttle'] : null;
-        },$nodes);
+        }, $nodes);
     }
 
-    static function getKeyLogs()
-    {   
+    public static function getKeyLogs()
+    {
         $nodes = self::getKeyNodes();
-        return array_map(function($item){
+        return array_map(function ($item) {
             return isset($item['log']) ? $item['log'] : null;
-        },$nodes);
+        }, $nodes);
     }
 
-    static function getKeyNodes()
-    {   
+    public static function getKeyNodes()
+    {
         $config = self::getConfig();
-        $tmp = [];
-        foreach($config as $group){
+        $tmp    = [];
+        foreach ($config as $group) {
             $tmp += $group['routes'];
         }
         return $tmp;
     }
 
-    static function getConfig()
+    public static function getConfig()
     {
         return config('permissions');
     }
-    
+
 }

@@ -1,13 +1,11 @@
-<?php
+<?php namespace Wayne\Guard\Traits;
 
-namespace Wayne\Guard\trait ;
-
-trait HasManyRole
+trait HasManyRoles
 {
 
     function isSuper()
     {
-        $permissions = $this->getMergedPermission();
+        $permissions = $this->getMergedPermissions();
         return isset($permissions['super']) && $permissions['super'];
     }
 
@@ -36,7 +34,7 @@ trait HasManyRole
 
     function getSelfPermissions()
     {
-        $permission = $this->permissions;
+        $permission = $this->permissions ?: [];
         $permission = array_map(function ($item) {
             return intval($item);
         }, $permission);
@@ -56,7 +54,7 @@ trait HasManyRole
             if (!empty($item->permissions)) {
                 $permission = array_map(function ($item) {
                     return intval($item);
-                }, $permission ?: []);
+                }, $item->permissions ?: []);
                 $permissions = array_merge($permissions, $permission);
             }
         });
