@@ -21,7 +21,7 @@ trait HasManyRoles
     function getPermissions()
     {
         if ($this->isSuper()) {
-            return $this->getFullPermissions();
+            return $this->getFullPermissions() + ['super' => 1];
         }
         return $this->getMergedPermissions();
     }
