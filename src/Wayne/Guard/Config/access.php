@@ -16,5 +16,9 @@ return [
         'decay' => 60 * 24,
         'message' => '您的访问已超过最大限制！',
         'trigger' => 'throttle.handle',
+        'handle' => function($key, $total, $decayMinutes){
+            logger("$key, $total, $decayMinutes");
+            return response()->make('您的访问已超过最大限制！');
+        }
     ]
 ];

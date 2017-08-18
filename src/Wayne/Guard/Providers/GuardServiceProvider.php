@@ -70,6 +70,6 @@ class GuardServiceProvider extends ServiceProvider
         }
 
         // 注册行为日志
-        app()->instance('access.log', new \Wayne\Guard\Services\AccessLog);
+        app()->instance('access.logger', new \Wayne\Guard\Services\AccessLogger);
     }
 }

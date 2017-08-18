@@ -46,10 +46,10 @@ class AccessThrottle
             if ($this->limiter->tooManyAttempts($totalKey , $total, $decayMinutes)) {
                 $handle = config('access.throttle.handle');
                 if (is_callable($handle)) {
-                    $handle($totalKey , $total, $decayMinutes);
+                    return $handle($totalKey , $total, $decayMinutes) ?: $this->buildResponse($key, $maxAttempts);
                 } else if(app()->bound($handle)) {
                     $handle = app()->make($handle);
-                    $handle($totalKey , $total, $decayMinutes);
+                    return $handle($totalKey , $total, $decayMinutes) ?: $this->buildResponse($key, $maxAttempts);
                 }
                 return $this->buildResponse($totalKey , $total);
             }
@@ -59,18 +59,16 @@ class AccessThrottle
 
         // 单个接口限制访问
         $key = app('router')->currentRouteName();
-        $permissions = config('permissions');
-        if (isset($permissions[$key]) 
-            && isset($permissions[$key]['throttle']) 
-            && $permissions[$key]['throttle'] >0) {
-            $maxAttempts = $permissions[$key]['throttle'];
+        $permissions = \Wayne\Guard\NamesConfigHelper::getKeyThrottles();
+        if (isset($permissions[$key]) && $permissions[$key] > 0) {
+            $maxAttempts = $permissions[$key];
             if ($this->limiter->tooManyAttempts($key, $maxAttempts, $decayMinutes)) {
                 $handle = config('access.throttle.handle');
                 if (is_callable($handle)) {
-                    $handle($key, $total, $decayMinutes);
+                    return $handle($key, $maxAttempts, $decayMinutes) ?: $this->buildResponse($key, $maxAttempts);
                 } else if(app()->bound($handle)) {
                     $handle = app()->make($handle);
-                    $handle($key, $total, $decayMinutes);
+                    return $handle($key, $maxAttempts, $decayMinutes) ?: $this->buildResponse($key, $maxAttempts);
                 }
                 return $this->buildResponse($key, $maxAttempts);
             }

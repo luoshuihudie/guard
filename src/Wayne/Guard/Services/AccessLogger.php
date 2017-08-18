@@ -4,22 +4,22 @@ namespace Wayne\Guard\Services;
 
 use Wayne\Guard\NamesConfigHelper;
 
-class AccessLog
+class AccessLogger
 {
     protected $bindings = [];
     protected $logs = [];
 
     public function __construct()
     {
-        $permissions = \Wayne\Guard\NamesConfigHelper::getConfig();;
+        $permissions = \Wayne\Guard\NamesConfigHelper::getConfig();
         $this->logs  = collect($permissions)
             ->flatMap(function ($item) {
                 return $item['routes'];
             })->map(function ($item) {
-            return array_where($item, function ($value, $key) {
-                return starts_with($key, 'log.');
-            });
-        })->filter();
+                return array_filter($item, function ($value, $key) {
+                    return starts_with($key, 'log.');
+                }, ARRAY_FILTER_USE_BOTH);
+            })->filter();
     }
 
     public function get($name)

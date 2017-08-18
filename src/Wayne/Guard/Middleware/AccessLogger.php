@@ -22,7 +22,7 @@ class AccessLogger
         }
 
         if (is_callable($handle)) {
-            app('access.log')->log($handle);
+            app('access.logger')->log($handle);
         }
 
         return $response;

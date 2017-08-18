@@ -34,7 +34,7 @@ class Authenticate
         }
 
         $user = Auth::user();
-        app()->instance('user', $user);
+        app()->instance('login', $user);
 
         // 如果已登录
         if (!$user->activated) {

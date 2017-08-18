@@ -23,7 +23,7 @@ return [
             'type'     => 'page',
             'uses'     => 'HomeController@welcome',
             'limit-on' => false,
-            'log.file' => '【{{user.name}}】访问了操作 Welcome',
+            'log.file' => '【{{login.name}}】访问了操作 Welcome',
         ],
         'home'    => [
             'name'     => 'Home',
@@ -33,7 +33,7 @@ return [
             'uses'     => 'HomeController@home',
             'limit-on' => true, // 权限开关，值为false 则登陆后不限制该功能,默认为 true
             'throttle' => 100, // 限制单用户最大访问次数，
-            'log.file' => '【{{user.name}}】访问了操作日志页',
+            'log.file' => '【{{login.name}}】访问了操作日志页',
         ],
     ],
 ];
