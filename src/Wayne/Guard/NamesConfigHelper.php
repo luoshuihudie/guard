@@ -38,7 +38,7 @@ class NamesConfigHelper
 
     public static function getConfig()
     {
-        return config('permissions');
+        return config('permissions', []);
     }
 
 }
