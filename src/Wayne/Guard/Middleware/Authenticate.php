@@ -29,7 +29,7 @@ class Authenticate
                     'redirect' => config('auth.gateway', '/login'),
                 ], 401);
             } else {
-                return config('auth.gateway', '/login');
+                return redirect(config('auth.gateway', '/login'));
             }
         }
 
