@@ -1,6 +1,6 @@
 <?php namespace Wayne\Guard\Middleware;
 
-use Closure;
+use Closure, Auth;
 use Carbon\Carbon;
 use Illuminate\Cache\RateLimiter;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,47 +40,51 @@ class AccessThrottle
         $decayMinutes = config('access.throttle.decay', 1);
         $total = config('access.throttle.total', 0);
 
+        $user = Auth::user();
+        $id = $user->id;
         // 总访问次数
+        $totalKey = 'access.throttle.total';
+        $theKey = $user->id . ':' . $totalKey;
         if ($total > 0) {
-            $totalKey = 'access.throttle.total';
-            if ($this->limiter->tooManyAttempts($totalKey , $total, $decayMinutes)) {
+            if ($this->limiter->tooManyAttempts($theKey , $total, $decayMinutes)) {
                 $handle = config('access.throttle.handle');
                 if (is_callable($handle)) {
-                    return $handle($totalKey , $total, $decayMinutes) ?: $this->buildResponse($key, $maxAttempts);
+                    $response = $handle($totalKey , $total, $decayMinutes);
                 } else if(app()->bound($handle)) {
                     $handle = app()->make($handle);
-                    return $handle($totalKey , $total, $decayMinutes) ?: $this->buildResponse($key, $maxAttempts);
+                    $response = $handle($totalKey , $total, $decayMinutes);
                 }
-                return $this->buildResponse($totalKey , $total);
+                return $response ?: $this->buildResponse($theKey , $total);
             }
 
-            $this->limiter->hit($totalKey, $decayMinutes);
+            $this->limiter->hit($theKey, $decayMinutes);
         }
 
         // 单个接口限制访问
         $key = app('router')->currentRouteName();
+        $theKey = $user->id . ':' . $key;
         $permissions = \Wayne\Guard\NamesConfigHelper::getKeyThrottles();
         if (isset($permissions[$key]) && $permissions[$key] > 0) {
             $maxAttempts = $permissions[$key];
-            if ($this->limiter->tooManyAttempts($key, $maxAttempts, $decayMinutes)) {
+            if ($this->limiter->tooManyAttempts($theKey, $maxAttempts, $decayMinutes)) {
                 $handle = config('access.throttle.handle');
                 if (is_callable($handle)) {
-                    return $handle($key, $maxAttempts, $decayMinutes) ?: $this->buildResponse($key, $maxAttempts);
+                    $response = $handle($key, $maxAttempts, $decayMinutes);
                 } else if(app()->bound($handle)) {
                     $handle = app()->make($handle);
-                    return $handle($key, $maxAttempts, $decayMinutes) ?: $this->buildResponse($key, $maxAttempts);
+                    $response = $handle($key, $maxAttempts, $decayMinutes);
                 }
-                return $this->buildResponse($key, $maxAttempts);
+                return $response ?: $this->buildResponse($key, $maxAttempts);
             }
 
-            $this->limiter->hit($key, $decayMinutes);
+            $this->limiter->hit($theKey, $decayMinutes);
         }
 
         $response = $next($request);
 
         return $this->addHeaders(
             $response, $maxAttempts,
-            $this->calculateRemainingAttempts($key, $maxAttempts)
+            $this->calculateRemainingAttempts($theKey, $maxAttempts)
         );
     }
 
