@@ -10,10 +10,13 @@ class NamesConfigHelper
         return array_keys($nodes);
     }
 
-    public static function getKeyThrottles()
+    public static function getKeyThrottles($group = null)
     {
         $nodes = self::getKeyNodes();
-        return array_map(function ($item) {
+        return array_map(function ($item) use ($group) {
+            if ($group && isset($item["throttle.{$group}"])) {
+                return $item["throttle.{$group}"];
+            }
             return isset($item['throttle']) ? $item['throttle'] : null;
         }, $nodes);
     }

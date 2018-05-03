@@ -35,54 +35,78 @@ class AccessThrottle
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {   
-        $maxAttempts = 60;
-        $decayMinutes = config('access.throttle.decay', 1);
-        $total = config('access.throttle.total', 0);
+    {
+
+        $user = $request->user();
+        $group = null;
+        if ($user && method_exists($user, 'getGroupIdentifier')) {
+            $group = $user->getGroupIdentifier();
+        }
+
+        $config = $this->getThrottleConfig($group);
+        $decay = $config['decay'];
+        $total = $config['total'];
 
         // 总访问次数
         if ($total > 0) {
-            $totalKey = 'access.throttle.total';
-            if ($this->limiter->tooManyAttempts($totalKey , $total, $decayMinutes)) {
-                $handle = config('access.throttle.handle');
+            $totalName ='access.throttle.total';
+            $totalKey = $this->getCacheKey($totalName, $user);
+            if ($this->limiter->tooManyAttempts($totalKey, $total, $decay)) {
+                $handle = $config['trigger'];
+                $resp = null;
                 if (is_callable($handle)) {
-                    return $handle($totalKey , $total, $decayMinutes) ?: $this->buildResponse($key, $maxAttempts);
+                    $resp = $handle($totalName , $total, $decay);
                 } else if(app()->bound($handle)) {
                     $handle = app()->make($handle);
-                    return $handle($totalKey , $total, $decayMinutes) ?: $this->buildResponse($key, $maxAttempts);
+                    $resp = $handle($totalName , $total, $decay);
                 }
-                return $this->buildResponse($totalKey , $total);
+                return $resp ?: $this->buildResponse($totalName , $total, $config['message']);
             }
 
-            $this->limiter->hit($totalKey, $decayMinutes);
+            $this->limiter->hit($totalKey, $decay);
         }
 
         // 单个接口限制访问
-        $key = app('router')->currentRouteName();
-        $permissions = \Wayne\Guard\NamesConfigHelper::getKeyThrottles();
-        if (isset($permissions[$key]) && $permissions[$key] > 0) {
-            $maxAttempts = $permissions[$key];
-            if ($this->limiter->tooManyAttempts($key, $maxAttempts, $decayMinutes)) {
-                $handle = config('access.throttle.handle');
+        $maxAttempts = 60;
+        $routeName = app('router')->currentRouteName();
+        $routeKey = $this->getCacheKey($routeName, $user);
+        $permissions = \Wayne\Guard\NamesConfigHelper::getKeyThrottles($group);
+        if (isset($permissions[$routeName]) && $permissions[$routeName] > 0) {
+            $maxAttempts = $permissions[$routeName];
+            if ($this->limiter->tooManyAttempts($routeKey, $maxAttempts, $decay)) {
+                $resp = null;
+                $handle = $config['trigger'];
                 if (is_callable($handle)) {
-                    return $handle($key, $maxAttempts, $decayMinutes) ?: $this->buildResponse($key, $maxAttempts);
+                    $resp = $handle($routeName , $maxAttempts, $decay);
                 } else if(app()->bound($handle)) {
                     $handle = app()->make($handle);
-                    return $handle($key, $maxAttempts, $decayMinutes) ?: $this->buildResponse($key, $maxAttempts);
+                    $resp = $handle($routeName , $maxAttempts, $decay);
                 }
-                return $this->buildResponse($key, $maxAttempts);
+                return $resp ?: $this->buildResponse($routeName, $maxAttempts, $config['message']);
             }
 
-            $this->limiter->hit($key, $decayMinutes);
+            $this->limiter->hit($routeKey, $decay);
         }
 
         $response = $next($request);
 
         return $this->addHeaders(
             $response, $maxAttempts,
-            $this->calculateRemainingAttempts($key, $maxAttempts)
+            $this->calculateRemainingAttempts($routeName, $maxAttempts)
         );
     }
+
+
+    protected function getThrottleConfig($group = null)
+    {
+        $access = config('access');
+        if ($group && isset($access["throttle.{$group}"])) {
+            return $access["throttle.{$group}"];
+        }
+        return $access['throttle'];
+    }
+
+
 
     /**
      * Create a 'too many attempts' response.
@@ -91,9 +115,9 @@ class AccessThrottle
      * @param  int  $maxAttempts
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function buildResponse($key, $maxAttempts)
+    protected function buildResponse($key, $maxAttempts, $message = null)
     {
-        $response = new Response('Too Many Attempts.', 429);
+        $response = new Response($message ?: 'Too Many Attempts.', 429);
 
         $retryAfter = $this->limiter->availableIn($key);
 
@@ -145,5 +169,10 @@ class AccessThrottle
         }
 
         return $this->limiter->retriesLeft($key, $maxAttempts);
+    }
+
+    protected function getCacheKey($key, $user)
+    {
+        return $key . ':' . $user->id;
     }
 }
