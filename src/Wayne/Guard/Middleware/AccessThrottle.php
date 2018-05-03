@@ -1,6 +1,6 @@
 <?php namespace Wayne\Guard\Middleware;
 
-use Closure;
+use Closure, Auth;
 use Carbon\Carbon;
 use Illuminate\Cache\RateLimiter;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +47,11 @@ class AccessThrottle
         $decay = $config['decay'];
         $total = $config['total'];
 
+        $user = Auth::user();
+        $id = $user->id;
         // 总访问次数
+        $totalKey = 'access.throttle.total';
+        $theKey = $user->id . ':' . $totalKey;
         if ($total > 0) {
             $totalName ='access.throttle.total';
             $totalKey = $this->getCacheKey($totalName, $user);

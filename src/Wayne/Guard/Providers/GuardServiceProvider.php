@@ -37,7 +37,7 @@ class GuardServiceProvider extends ServiceProvider
                 }
             });
 
-            $keys = \Wayne\Guard\NamesConfigHelper::getKeys();
+            $keys = \Wayne\Guard\NamesConfigHelper::getKeyPermissions();
             foreach ($keys as $key) {
                 $gate->define($key, function ($user) use ($key) {
                     return $user->hasAccess($key);
@@ -60,10 +60,10 @@ class GuardServiceProvider extends ServiceProvider
                 'namespace'  => isset($group['namespace']) ? $group['namespace'] : null,
             ], function ($router) use ($group) {
                 foreach ($group['routes'] as $k => $node) {
-                    if (isset($node['type']) && !in_array($node['type'], ['menu', 'page'])) {
+                    if (!isset($node['uri'])) {
                         continue;
                     }
-                    $method = $node['method'] ?: 'any';
+                    $method = isset($node['method']) ? $node['method'] : 'get';
                     $router->{$method}($node['uri'], ['uses' => $node['uses'], 'as' => $k]);
                 }
             });

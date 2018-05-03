@@ -10,6 +10,15 @@ class NamesConfigHelper
         return array_keys($nodes);
     }
 
+    public static function getKeyPermissions()
+    {
+        $nodes = self::getKeyNodes();
+        $nodes = array_filter($nodes, function ($item) {
+            return !isset($item['limit-on']) || $item['limit-on'];
+        }, ARRAY_FILTER_USE_BOTH);
+        return array_keys($nodes);
+    }
+
     public static function getKeyThrottles($group = null)
     {
         $nodes = self::getKeyNodes();
