@@ -16,7 +16,7 @@ class Authorizate
     public function handle($request, Closure $next, $guard = null)
     {
         $routeName = app('router')->currentRouteName();
-        if (Gate::denies($routeName)) {
+        if (config('auth.authorizate.switch', false) && Gate::denies($routeName)) {
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json([
                     'code' => 403,
