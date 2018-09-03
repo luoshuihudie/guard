@@ -2,6 +2,8 @@
 
 use Auth;
 use Closure;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+
 
 class Authenticate
 {
@@ -22,15 +24,7 @@ class Authenticate
         if (Auth::guard($guard)->guest()) {// ~5.2
             $redirect_url = $request->get('redirect_to') ?: config('sso.uri-success-skip');
             session(['redirect_url' => $redirect_url]);
-            if ($request->ajax() || $request->wantsJson()) {
-                return response()->json([
-                    'code'     => 401,
-                    'msg'      => config('auth.response.401', '您登录已过期，请重新登录。'),
-                    'redirect' => config('auth.gateway', '/login'),
-                ], 401);
-            } else {
-                return redirect(config('auth.gateway', '/login'));
-            }
+            throw new UnauthorizedHttpException('您登录已过期，请重新登录。');
         }
 
         $user = Auth::user();
@@ -38,14 +32,7 @@ class Authenticate
 
         // 如果已登录
         if (!$user->activated) {
-            if ($request->ajax() || $request->wantsJson()) {
-                return response()->json([
-                    'code' => 401,
-                    'msg'  => config('auth.response.401', '您的账户已被禁用，请联系管理员获取更多访问权限。'),
-                ])->setStatusCode(401);
-            } else {
-                return response(config('auth.response.401', '您的账户已被禁用，请联系管理员获取更多访问权限。'), 401);
-            }
+            throw new UnauthorizedHttpException('您的账户已被禁用，请联系管理员获取更多访问权限。');
         }
         return $next($request);
     }

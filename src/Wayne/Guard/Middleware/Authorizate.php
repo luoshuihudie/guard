@@ -2,6 +2,7 @@
 
 use Closure;
 use Gate;
+use Illuminate\Auth\AuthenticationException;
 
 class Authorizate
 {
@@ -17,17 +18,7 @@ class Authorizate
     {
         $routeName = app('router')->currentRouteName();
         if (config('auth.authorizate.switch', false) && Gate::denies($routeName)) {
-            if ($request->ajax() || $request->wantsJson()) {
-                return response()->json([
-                    'code' => 403,
-                    'msg'  => config('auth.response.403', '您的权限不足，请联系管理员获取更多访问权限。'),
-                ])->setStatusCode(403);
-            } else {
-                return response(
-                    config('auth.response.403', '您的权限不足，请联系管理员获取更多访问权限。')
-                    , 403
-                );
-            }
+            throw new AuthenticationException('您的权限不足！');
         }
         return $next($request);
     }
