@@ -12,6 +12,6 @@
         }
     },
     "require": {
-       "laravel/framework": "^5.2.0"
+       "laravel/framework": "~6"
     }
 }
