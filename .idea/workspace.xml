@@ -2,19 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="91ab825e-cb81-48d7-9d36-bce1431a3967" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wayne/Guard/Config/access.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wayne/Guard/Config/access.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wayne/Guard/Middleware/AccessLogger.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wayne/Guard/Middleware/AccessLogger.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wayne/Guard/Middleware/AccessThrottle.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wayne/Guard/Middleware/AccessThrottle.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wayne/Guard/Middleware/Authenticate.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wayne/Guard/Middleware/Authenticate.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wayne/Guard/Middleware/Authorizate.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wayne/Guard/Middleware/Authorizate.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wayne/Guard/NamesConfigHelper.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wayne/Guard/NamesConfigHelper.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wayne/Guard/Providers/GuardServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wayne/Guard/Providers/GuardServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wayne/Guard/Services/AccessLogger.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wayne/Guard/Services/AccessLogger.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wayne/Guard/Traits/HasManyRoles.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wayne/Guard/Traits/HasManyRoles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wayne/Guard/Traits/HasOneRole.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wayne/Guard/Traits/HasOneRole.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wayne/Guard/config/permissions.home.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wayne/Guard/config/permissions.home.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -66,7 +55,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1573546977745</updated>
-      <workItem from="1573546979153" duration="1941000" />
+      <workItem from="1573546979153" duration="2649000" />
     </task>
     <servers />
   </component>

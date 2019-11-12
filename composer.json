@@ -12,6 +12,6 @@
         }
     },
     "require": {
-       "laravel/framework": "~6"
+       "laravel/framework": ">5.2"
     }
 }
