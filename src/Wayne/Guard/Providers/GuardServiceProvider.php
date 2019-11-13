@@ -53,20 +53,48 @@ class GuardServiceProvider extends ServiceProvider
 
         // 自动挂载路由
         $permissions = \Wayne\Guard\NamesConfigHelper::getConfig();
+        if (!is_array($permissions)) {
+            $permissions = [];
+        }
         foreach ($permissions as $key => $group) {
-            Route::group([
-                'middleware' => isset($group['middleware']) ? $group['middleware'] : null,
-                'prefix'     => isset($group['prefix']) ? $group['prefix'] : null,
-                'namespace'  => isset($group['namespace']) ? $group['namespace'] : null,
-            ], function ($router) use ($group) {
-                foreach ($group['routes'] as $k => $node) {
-                    if (!isset($node['uri'])) {
-                        continue;
+            Route::group(
+                [
+                    'middleware' =>isset($group['middleware']) ? $group['middleware'] : null,
+                    'prefix'     =>isset($group['prefix']) ? $group['prefix'] : null,
+                    'namespace'  =>isset($group['namespace']) ? $group['namespace'] : null
+                ], function ($router) use ($group) {
+                if (isset($group['routes'])) {
+                    foreach ($group['routes'] as $k => $node) {
+                        if (isset($node['type']) && !in_array($node['type'], ['menu','page'])) {
+                            continue;
+                        }
+                        if (!isset($node['uri'])) {
+                            continue;
+                        }
+                        $method = $node['method'] ?: 'get';
+                        $action = $router->{$method}($node['uri'], ['uses'=>$node['uses'], 'as'=>$k]);
+                        if (isset($node['middleware']) && $node['middleware']) {
+                            //$router->middleware($node['middleware']);
+                            $action->middleware($node['middleware']);
+                        }
                     }
-                    $method = isset($node['method']) ? $node['method'] : 'get';
-                    $router->{$method}($node['uri'], ['uses' => $node['uses'], 'as' => $k]);
                 }
-            });
+            }
+            );
+            //原始挂载路由方式，不支持子中间件
+//            Route::group([
+//                'middleware' => isset($group['middleware']) ? $group['middleware'] : null,
+//                'prefix'     => isset($group['prefix']) ? $group['prefix'] : null,
+//                'namespace'  => isset($group['namespace']) ? $group['namespace'] : null,
+//            ], function ($router) use ($group) {
+//                foreach ($group['routes'] as $k => $node) {
+//                    if (!isset($node['uri'])) {
+//                        continue;
+//                    }
+//                    $method = isset($node['method']) ? $node['method'] : 'get';
+//                    $router->{$method}($node['uri'], ['uses' => $node['uses'], 'as' => $k]);
+//                }
+//            });
         }
 
         // 注册行为日志
