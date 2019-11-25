@@ -24,7 +24,7 @@ class GuardServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../config/access.php'           => config_path('access.php'),
-            __DIR__ . '/../config/permissions.home.php' => config_path('permissions.home.php'),
+            __DIR__ . '/../config/permissions.home.php' => config_path('permissions/permissions.home.php'),
         ], 'config');
 
         $this->registerPolicies($gate);

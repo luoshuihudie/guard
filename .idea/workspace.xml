@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="91ab825e-cb81-48d7-9d36-bce1431a3967" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Wayne/Guard/Services/AccessLogger.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wayne/Guard/Services/AccessLogger.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Wayne/Guard/Providers/GuardServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Wayne/Guard/Providers/GuardServiceProvider.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,7 +23,7 @@
   <component name="ProjectId" id="1TVYxcEoHkRUbjAeODtKfmssmqp" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pintu" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -58,7 +58,7 @@
       <workItem from="1573546979153" duration="2784000" />
       <workItem from="1573611961924" duration="380000" />
       <workItem from="1573613712160" duration="74000" />
-      <workItem from="1574676761809" duration="121000" />
+      <workItem from="1574676761809" duration="702000" />
     </task>
     <servers />
   </component>
