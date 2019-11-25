@@ -17,7 +17,7 @@ class AccessLogger
                 return $item['routes'];
             })->map(function ($item) {
                 return array_filter($item, function ($value, $key) {
-                    return starts_with($key, 'log.');
+                    return $this->startsWith($key, 'log.');
                 }, ARRAY_FILTER_USE_BOTH);
             })->filter();
     }
@@ -61,5 +61,23 @@ class AccessLogger
             $log = str_replace($replace, $this->get($key), $log);
         }
         return $log;
+    }
+
+    /**
+     * Determine if a given string starts with a given substring.
+     *
+     * @param  string  $haystack
+     * @param  string|array  $needles
+     * @return bool
+     */
+    public function startsWith($haystack, $needles)
+    {
+        foreach ((array) $needles as $needle) {
+            if ($needle !== '' && substr($haystack, 0, strlen($needle)) === (string) $needle) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
