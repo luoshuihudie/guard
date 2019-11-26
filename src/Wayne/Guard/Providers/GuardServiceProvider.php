@@ -22,6 +22,18 @@ class GuardServiceProvider extends ServiceProvider
      */
     public function boot(GateContract $gate)
     {
+        if ($_SERVER['PHP_SELF'] === 'artisan'
+            && !empty($_SERVER['argv'])
+            && in_array("vendor:publish", $_SERVER['argv'])
+        ) {
+            if (file_exists(config_path('permissions/home.php'))) {
+                unlink(config_path('permissions/home.php'));
+            }
+            if (file_exists(config_path('access.php'))) {
+                unlink(config_path('access.php'));
+            }
+        }
+
         $this->publishes([
             __DIR__ . '/../config/access.php'           => config_path('access.php'),
             __DIR__ . '/../config/permissions.home.php' => config_path('permissions/permissions.home.php'),
